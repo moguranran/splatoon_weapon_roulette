@@ -6,12 +6,12 @@ class Weapon {
 
   Weapon({this.name, this.mainWeapon, this.subWeapon, this.special});
 
-  factory Weapon.fromJson(Map<String, dynamic> json){
+  factory Weapon.fromJson(Map<String, dynamic> json, {String language='ja_JP'}){
     return new Weapon(
-      name: json['name']['ja_JP'],
-      mainWeapon: json['type']['name']['ja_JP'],
-      subWeapon: json['sub']['name']['ja_JP'],
-      special: json['special']['name']['ja_JP'],
+      name: json['name'][language],
+      mainWeapon: json['type']['name'][language],
+      subWeapon: json['sub']['name'][language],
+      special: json['special']['name'][language],
     );
   }
 }

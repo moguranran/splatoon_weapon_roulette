@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:splatoon_weapon_roulette/Player/player.dart';
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 
 import 'dart:async' show Future;
@@ -36,33 +37,67 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final List<Weapon> _weapons = [];
+  List<Weapon> _weapons = [];
   Weapon _weapon = null;
+  final List<String> languages = [
+    'de_DE',
+    'en_GB',
+    'en_US',
+    'es_ES',
+    'es_MX',
+    'fr_CA',
+    'fr_FR',
+    'it_IT',
+    'ja_JP',
+    'nl_NL',
+    'ru_RU'
+  ];
+  int _cnt = 0;
+  String language = 'ja_JP';
+  List<Player> players = List(4);
 
-  void _makeWeaponList(List<Weapon> list) async {
-    String _loadData = await rootBundle.loadString('assets/weapon.json');
-    List js = await jsonDecode(_loadData);
-    js.forEach((key) {
-      Weapon weapon = Weapon.fromJson(key);
-      list.add(weapon);
-    });
+  void _makeWeaponList(List<Weapon> list){
+    // _weapons = [];
+    // String _loadData = await rootBundle.loadString('assets/weapon.json');
+    // List js = await jsonDecode(_loadData);
+    // js.forEach((key) {
+    //   Weapon weapon = Weapon.fromJson(key, language: language);
+    //   //list.add(weapon);
+    //   _weapons.add(weapon);
+    // });
+
+    // for (var key in js) {
+    //   Weapon weapon = Weapon.fromJson(key, language: language);
+    //   _weapons.add(weapon);
+    // }
+    //players.add(new Player('プレイヤー1', language));
+    players[0] = new Player('プレイヤー1', language);
+    print(players[0].weapons.length);
   }
 
   void _showWeapon() {
     setState(() {
-      _weapon = _weapons[_counter];
+      _weapon = players[0].weapons[_counter];
       _counter++;
-      if (_counter > _weapons.length) _counter = 0;
+      if (_counter > players[0].weapons.length) _counter = 0;
     });
   }
 
+  void _openSettings() {
+    _counter = 0;
+    _cnt++;
+    if (_cnt > languages.length) _cnt = 0;
+    language = languages[_cnt];
+    _showWeapon();
+  }
+
   Text _getWeaponName() {
-    if (_weapons.length == 0) return Text('ここにブキ名が表示されます');
-    
-    if(_weapon.mainWeapon == 'シューター'){
+    if (players[0].weapons.length == 0) return Text('ここにブキ名が表示されます');
+
+    if (players[0].weapons[_counter].mainWeapon == 'シューター') {
       return new Text('${_weapon.name} シューター');
     }
-    
+
     return Text('${_weapon.name}');
   }
 
@@ -74,6 +109,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: _openSettings,
+        ),
         title: Text(widget.title),
       ),
       body: Center(
