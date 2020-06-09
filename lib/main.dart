@@ -7,8 +7,37 @@ import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
 
-void main() {
+List<Player> players = List(4);
+final List<String> languages = [
+  'de_DE',
+  'en_GB',
+  'en_US',
+  'es_ES',
+  'es_MX',
+  'fr_CA',
+  'fr_FR',
+  'it_IT',
+  'ja_JP',
+  'nl_NL',
+  'ru_RU'
+];
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await init();
+  waitSetup();
   runApp(MyApp());
+}
+
+dynamic init() {
+  players[0] = new Player('プレイヤー1', languages[8]);
+  players[1] = new Player('プレイヤー2', languages[0]);
+  players[2] = new Player('プレイヤー3', languages[1]);
+  players[3] = new Player('プレイヤー4', languages[3]);
+}
+
+void waitSetup() {
+  print('waiting...${players[0].weapons.length}');
 }
 
 class MyApp extends StatelessWidget {
@@ -37,57 +66,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  List<Weapon> _weapons = [];
-  Weapon _weapon = null;
-  final List<String> languages = [
-    'de_DE',
-    'en_GB',
-    'en_US',
-    'es_ES',
-    'es_MX',
-    'fr_CA',
-    'fr_FR',
-    'it_IT',
-    'ja_JP',
-    'nl_NL',
-    'ru_RU'
-  ];
+  Weapon _weapon;
+
   int _cnt = 0;
-  String language = 'ja_JP';
-  List<Player> players = List(4);
-
-  void _makeWeaponList(List<Weapon> list){
-    // _weapons = [];
-    // String _loadData = await rootBundle.loadString('assets/weapon.json');
-    // List js = await jsonDecode(_loadData);
-    // js.forEach((key) {
-    //   Weapon weapon = Weapon.fromJson(key, language: language);
-    //   //list.add(weapon);
-    //   _weapons.add(weapon);
-    // });
-
-    // for (var key in js) {
-    //   Weapon weapon = Weapon.fromJson(key, language: language);
-    //   _weapons.add(weapon);
-    // }
-    //players.add(new Player('プレイヤー1', language));
-    players[0] = new Player('プレイヤー1', language);
-    print(players[0].weapons.length);
-  }
 
   void _showWeapon() {
     setState(() {
-      _weapon = players[0].weapons[_counter];
+      _weapon = players[_cnt].weapons[_counter];
       _counter++;
-      if (_counter > players[0].weapons.length) _counter = 0;
+      if (_counter == players[0].weapons.length) _counter = 0;
     });
   }
 
   void _openSettings() {
     _counter = 0;
     _cnt++;
-    if (_cnt > languages.length) _cnt = 0;
-    language = languages[_cnt];
+    if (_cnt > players.length) _cnt = 0;
     _showWeapon();
   }
 
@@ -103,10 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _makeWeaponList(_weapons);
-    //ToDo
-    //チョイス用チェックリストを作る
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -127,7 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             _getWeaponName(),
-            //Text('${_weapon.name}')
           ],
         ),
       ),
