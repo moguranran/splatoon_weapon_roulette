@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:splatoon_weapon_roulette/Player/player.dart';
+import 'package:splatoon_weapon_roulette/Tag/Tag.dart';
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 
 import 'dart:async' show Future;
@@ -67,8 +68,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Weapon _weapon;
-
   int _cnt = 0;
+  Tag tag = new Tag();
 
   void _showWeapon() {
     setState(() {
@@ -86,7 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Text _getWeaponName() {
-    if (players[0].weapons.length == 0) return Text('ここにブキ名が表示されます');
+    if (players[0].weapons.length == 0 || _weapon == null)
+      return Text('ここにブキ名が表示されます');
 
     if (players[0].weapons[_counter].mainWeapon == 'シューター') {
       return new Text('${_weapon.name} シューター');
@@ -105,26 +107,40 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            _getWeaponName(),
-          ],
-        ),
-      ),
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[
+      //       Text(
+      //         'You have pushed the button this many times:',
+      //       ),
+      //       Text(
+      //         '$_counter',
+      //         style: Theme.of(context).textTheme.headline4,
+      //       ),
+      //       _getWeaponName(),
+      //       Container(
+      //         color: Colors.blue,
+      //         width: 300.0,
+      //         height: 300.0,
+      //         child: Icon(
+      //           Icons.menu,
+      //           size: 50.0,
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // ),
+      body: makeSlot(),
       floatingActionButton: FloatingActionButton(
         onPressed: _showWeapon,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  Container makeSlot() {
+    return tag.changeContainer();
   }
 }
