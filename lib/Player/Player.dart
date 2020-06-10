@@ -1,15 +1,25 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 
-class Player {
+class Player with ChangeNotifier {
   String _name;
+  String get name => _name;
   String language;
   List<Weapon> weapons;
+  bool _isLocked;
+  bool get isLocked => _isLocked;
+
+  set isLocked(bool isLocked){
+    _isLocked = isLocked;
+    notifyListeners();
+  }
 
   Player(String name, String language) {
     this._name = name;
     this.language = language;
+    _isLocked = false;
     _makeWeaponList();
     print(weapons.length);
   }

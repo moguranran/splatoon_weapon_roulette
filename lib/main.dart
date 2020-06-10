@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:splatoon_weapon_roulette/Player/player.dart';
 import 'package:splatoon_weapon_roulette/Tag/Tag.dart';
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
-
-import 'dart:async' show Future;
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:auto_size_text/auto_size_text.dart';
 
 List<Player> players = List(4);
 final List<String> languages = [
@@ -101,46 +99,87 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey,
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: _openSettings,
         ),
         title: Text(widget.title),
       ),
-      // body: Center(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       Text(
-      //         'You have pushed the button this many times:',
-      //       ),
-      //       Text(
-      //         '$_counter',
-      //         style: Theme.of(context).textTheme.headline4,
-      //       ),
-      //       _getWeaponName(),
-      //       Container(
-      //         color: Colors.blue,
-      //         width: 300.0,
-      //         height: 300.0,
-      //         child: Icon(
-      //           Icons.menu,
-      //           size: 50.0,
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // ),
       body: makeSlot(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showWeapon,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('追加')),
+        BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('まとめ')),
+      ]),
     );
   }
 
+  bool _lock = false;
+
   Container makeSlot() {
-    return tag.changeContainer();
+    //return tag.changeContainer();
+    return Container(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            color: Colors.blue,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: IconButton(
+                    padding: EdgeInsets.only(left: 10.0),
+                    icon: Icon(_lock ? Icons.lock : Icons.lock_open),
+                    iconSize: 40.0,
+                    onPressed: _lockStateChange,
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: AutoSizeText(
+                    '哲学するもぐら',
+                    style: TextStyle(fontSize: 20),
+                    maxLines: 1,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: IconButton(
+                    padding: EdgeInsets.only(right: 10.0),
+                    icon: Icon(Icons.settings),
+                    iconSize: 40.0,
+                    onPressed: () {},
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: Colors.red,
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: Colors.green,
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: Colors.yellow,
+          ),
+        ),
+      ],
+    ));
+  }
+
+  void _lockStateChange() {
+    setState(() {
+      _lock = !_lock;
+    });
+    print(_lock);
   }
 }
