@@ -5,6 +5,7 @@ import 'package:splatoon_weapon_roulette/Player/player.dart';
 import 'package:splatoon_weapon_roulette/Tag/Tag.dart';
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 List<Player> players = List(4);
 final List<String> languages = [
@@ -98,14 +99,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: _openSettings,
-        ),
-        title: Text(widget.title),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.grey,
+      //   leading: IconButton(
+      //     icon: Icon(Icons.menu),
+      //     onPressed: _openSettings,
+      //   ),
+      //   title: Text(widget.title),
+      // ),
       body: makeSlot(),
       bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('追加')),
@@ -159,7 +160,71 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Expanded(
           child: Container(
-            color: Colors.red,
+            //color: Colors.transparent,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: AutoSizeText(
+                          '${players[1].name}',
+                          minFontSize: 20,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: IconButton(
+                                icon:
+                                    Icon(_lock ? Icons.lock : Icons.lock_open),
+                                onPressed: _lockStateChange,
+                              ),
+                            ),
+                            Expanded(
+                              child: IconButton(
+                                  icon: Icon(Icons.settings), onPressed: () {}),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text('..................................'),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        color: Colors.white,
+                        width: 150,
+                      ),
+                      Expanded(
+                        child: AutoSizeText(
+                          '${players[0].weapons[99].name}',
+                          minFontSize: 14,
+                          maxLines: 2,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         Expanded(
@@ -181,5 +246,18 @@ class _MyHomePageState extends State<MyHomePage> {
       _lock = !_lock;
     });
     print(_lock);
+  }
+
+  Widget get solidBorder {
+    return DottedBorder(
+      dashPattern: [4, 3],
+      strokeWidth: 2,
+      strokeCap: StrokeCap.round,
+      child: Container(
+        color: Colors.green,
+        height: 200,
+        width: 120,
+      ),
+    );
   }
 }

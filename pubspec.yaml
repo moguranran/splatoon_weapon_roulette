@@ -31,6 +31,8 @@ dependencies:
   
   auto_size_text: ^2.1.0
 
+  dotted_border: ^1.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
