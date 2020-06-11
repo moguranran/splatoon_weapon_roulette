@@ -107,7 +107,17 @@ class _MyHomePageState extends State<MyHomePage> {
       //   ),
       //   title: Text(widget.title),
       // ),
-      body: makeSlot(),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/background.png'),
+                    fit: BoxFit.cover)),
+          ),
+          makeSlot(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('追加')),
         BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('まとめ')),
@@ -125,7 +135,6 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Expanded(
           child: Container(
-            color: Colors.blue,
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -158,9 +167,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
+        _space(),
         Expanded(
           child: Container(
-            //color: Colors.transparent,
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -215,23 +224,25 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Expanded(
                         child: AutoSizeText(
-                          '${players[0].weapons[99].name}',
+                          '${players[0].language}',
                           minFontSize: 14,
                           maxLines: 2,
                         ),
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
+        _space(),
         Expanded(
           child: Container(
             color: Colors.green,
           ),
         ),
+        _space(),
         Expanded(
           child: Container(
             color: Colors.yellow,
@@ -259,5 +270,9 @@ class _MyHomePageState extends State<MyHomePage> {
         width: 120,
       ),
     );
+  }
+
+  Container _space(){
+    return Container(color: Colors.black, height: 5,);
   }
 }
