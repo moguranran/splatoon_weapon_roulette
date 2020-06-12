@@ -188,27 +188,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: <Widget>[
                         Expanded(
                           flex: 5,
-                          child: Stack(
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/tag/tag__name.png'),
-                                        fit: BoxFit.fill)),
-                                margin: EdgeInsets.all(5),
-                                padding: EdgeInsets.all(5),
-                                child: SizedBox.expand(
-                                  child: AutoSizeText(
-                                    '${players[1].name}',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              )
-                            ],
+                          child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/tag/tag__name.png'),
+                                    fit: BoxFit.fill)),
+                            margin: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(3),
+                            child: SizedBox.expand(
+                              child: AutoSizeText(
+                                '${players[1].name}',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                                textAlign: TextAlign.center,
+                                //maxLines: 1,
+                              ),
+                            ),
                           ),
                         ),
                         Expanded(
@@ -224,14 +220,16 @@ class _MyHomePageState extends State<MyHomePage> {
                               Container(
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/tag/tag__icon.png'),
-                                            )),
-                                            margin: EdgeInsets.all(4),                                            
+                                  image: AssetImage('assets/tag/tag__icon.png'),
+                                )),
+                                margin: EdgeInsets.all(4),
                                 child: IconButton(
-                                  icon: Icon(players[1].isLocked
-                                      ? Icons.lock
-                                      : Icons.lock_open,color: Color.fromARGB(200, 219, 255, 213),),
+                                  icon: Icon(
+                                    players[1].isLocked
+                                        ? Icons.lock
+                                        : Icons.lock_open,
+                                    color: Color.fromARGB(200, 219, 255, 213),
+                                  ),
                                   onPressed: () => _lockStateChange(players[1]),
                                 ),
                               ),
@@ -240,9 +238,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                     image: DecorationImage(
                                         image: AssetImage(
                                             'assets/tag/tag__icon.png'))),
-                                            margin: EdgeInsets.all(4),
+                                margin: EdgeInsets.all(4),
                                 child: IconButton(
-                                    icon: Icon(Icons.settings, color: Color.fromARGB(200, 219, 255, 213),),
+                                    icon: Icon(
+                                      Icons.settings,
+                                      color: Color.fromARGB(200, 219, 255, 213),
+                                    ),
                                     onPressed: () {}),
                               ),
                             ],
