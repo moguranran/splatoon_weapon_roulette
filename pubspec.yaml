@@ -55,6 +55,14 @@ flutter:
   assets:
     - assets/weapon.json
     - assets/background.png
+    - assets/tag/tag_b.png
+    - assets/tag/tag_y.png
+    - assets/tag/tag_g.png
+    - assets/tag/tag_p.png
+    - assets/tag/tag__icon.png
+    - assets/tag/tag__name.png
+    - assets/tag/tag__weapon.png
+    - assets/tag/tag__weaponname.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

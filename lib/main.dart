@@ -128,109 +128,153 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Expanded(
-          child: Container(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    padding: EdgeInsets.only(left: 10.0),
-                    icon: Icon(players[0].isLocked ? Icons.lock : Icons.lock_open),
-                    iconSize: 40.0,
-                    onPressed: () => _lockStateChange(players[0]),
-                  ),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/tag/tag_b.png'),
+                        fit: BoxFit.cover)),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        padding: EdgeInsets.only(left: 10.0),
+                        icon: Icon(
+                            players[0].isLocked ? Icons.lock : Icons.lock_open),
+                        iconSize: 40.0,
+                        onPressed: () => _lockStateChange(players[0]),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: AutoSizeText(
+                        '哲学するもぐら',
+                        style: TextStyle(fontSize: 20),
+                        maxLines: 1,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        padding: EdgeInsets.only(right: 10.0),
+                        icon: Icon(Icons.settings),
+                        iconSize: 40.0,
+                        onPressed: () {},
+                      ),
+                    )
+                  ],
                 ),
-                Expanded(
-                  flex: 4,
-                  child: AutoSizeText(
-                    '哲学するもぐら',
-                    style: TextStyle(fontSize: 20),
-                    maxLines: 1,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    padding: EdgeInsets.only(right: 10.0),
-                    icon: Icon(Icons.settings),
-                    iconSize: 40.0,
-                    onPressed: () {},
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
-        _space(),
+        //_space(),
         Expanded(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: AutoSizeText(
-                          '${players[1].name}',
-                          minFontSize: 20,
+            child: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/tag/tag_b.png'),
+                      fit: BoxFit.fill)),
+              margin: EdgeInsets.all(5),
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 5,
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/tag/tag__name.png'),
+                                        fit: BoxFit.fill)),
+                                margin: EdgeInsets.all(5),
+                                padding: EdgeInsets.all(5),
+                                child: SizedBox.expand(
+                                  child: AutoSizeText(
+                                    '${players[1].name}',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: IconButton(
-                                icon:
-                                    Icon(players[1].isLocked ? Icons.lock : Icons.lock_open),
-                                onPressed: () => _lockStateChange(players[1]),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                              // color: Colors.white30,
                               ),
-                            ),
-                            Expanded(
-                              child: IconButton(
-                                  icon: Icon(Icons.settings), onPressed: () {}),
-                            ),
-                          ],
                         ),
-                      )
-                    ],
+                        Expanded(
+                          flex: 4,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/tag/tag__icon.png'),
+                                            )),
+                                            margin: EdgeInsets.all(4),                                            
+                                child: IconButton(
+                                  icon: Icon(players[1].isLocked
+                                      ? Icons.lock
+                                      : Icons.lock_open,color: Color.fromARGB(200, 219, 255, 213),),
+                                  onPressed: () => _lockStateChange(players[1]),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/tag/tag__icon.png'))),
+                                            margin: EdgeInsets.all(4),
+                                child: IconButton(
+                                    icon: Icon(Icons.settings, color: Color.fromARGB(200, 219, 255, 213),),
+                                    onPressed: () {}),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text('..................................'),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        color: Colors.white,
-                        width: 150,
-                      ),
-                      Expanded(
-                        child: AutoSizeText(
-                          '${players[0].language}',
-                          minFontSize: 14,
-                          maxLines: 2,
+                  Expanded(
+                    flex: 5,
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          color: Colors.white,
+                          width: 150,
                         ),
-                      )
-                    ],
+                        Expanded(
+                          child: AutoSizeText(
+                            '${players[0].language}',
+                            minFontSize: 14,
+                            maxLines: 2,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ),
-        _space(),
+          ],
+        )),
+        //_space(),
         Expanded(
           child: Container(
             color: Colors.green,
@@ -267,7 +311,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Container _space(){
-    return Container(color: Colors.black, height: 5,);
+  Container _space() {
+    return Container(
+      color: Colors.black,
+      height: 5,
+    );
   }
 }
