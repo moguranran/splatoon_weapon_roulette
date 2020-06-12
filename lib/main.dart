@@ -7,7 +7,8 @@ import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-List<Player> players = List(4);
+List<Player> players = new List(4);
+Tag tag;
 final List<String> languages = [
   'de_DE',
   'en_GB',
@@ -34,6 +35,7 @@ dynamic init() {
   players[1] = new Player('プレイヤー2', languages[0]);
   players[2] = new Player('プレイヤー3', languages[1]);
   players[3] = new Player('プレイヤー4', languages[3]);
+  tag = new Tag(players);
 }
 
 void waitSetup() {
@@ -68,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Weapon _weapon;
   int _cnt = 0;
-  Tag tag = new Tag();
+  //Tag tag = new Tag( players);
 
   void _showWeapon() {
     setState(() {
@@ -99,14 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.grey,
-      //   leading: IconButton(
-      //     icon: Icon(Icons.menu),
-      //     onPressed: _openSettings,
-      //   ),
-      //   title: Text(widget.title),
-      // ),
       body: Stack(
         children: <Widget>[
           Container(
@@ -128,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _lock = false;
 
   Container makeSlot() {
-    //return tag.changeContainer();
+    //return tag.changeContainer(_lockStateChange);
     return Container(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -141,9 +135,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   flex: 1,
                   child: IconButton(
                     padding: EdgeInsets.only(left: 10.0),
-                    icon: Icon(_lock ? Icons.lock : Icons.lock_open),
+                    icon: Icon(players[0].isLocked ? Icons.lock : Icons.lock_open),
                     iconSize: 40.0,
-                    onPressed: _lockStateChange,
+                    onPressed: () => _lockStateChange(players[0]),
                   ),
                 ),
                 Expanded(
@@ -196,8 +190,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             Expanded(
                               child: IconButton(
                                 icon:
-                                    Icon(_lock ? Icons.lock : Icons.lock_open),
-                                onPressed: _lockStateChange,
+                                    Icon(players[1].isLocked ? Icons.lock : Icons.lock_open),
+                                onPressed: () => _lockStateChange(players[1]),
                               ),
                             ),
                             Expanded(
@@ -252,11 +246,12 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 
-  void _lockStateChange() {
+  void _lockStateChange(Player player) {
     setState(() {
-      _lock = !_lock;
+      player.isLocked = !player.isLocked;
+      //players[0].isLocked = !players[0].isLocked;
     });
-    print(_lock);
+    print(player.isLocked);
   }
 
   Widget get solidBorder {
