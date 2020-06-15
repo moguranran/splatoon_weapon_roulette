@@ -1,136 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:splatoon_weapon_roulette/Player/Player.dart';
+import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:splatoon_weapon_roulette/Player/Players.dart';
+import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 
-class Tag {
-  int _container_cnt = 4;
-  List<bool> _locks = [false, false, false, false];
-  List players;
-  int num=0;
-  String step;
-
-  Tag(this.players);
-
-  Container changeContainer(void function()) {
-    Container container;// = null;
-    switch (_container_cnt) {
-      case 1:
-        container = _makeTagOne();
-        break;
-      case 2:
-        container = _makeTagTwo();
-        break;
-      case 3:
-        container = _makeTagThree();
-        break;
-      case 4:
-        container = _makeTagFour(function);
-        break;
-      default:
-    }
-
-    //_container_cnt++;
-    if (_container_cnt > 4) _container_cnt = 4;
-
-    return container;
+class Tag extends StatelessWidget {
+  final Color _commonWhite = Color.fromARGB(200, 219, 255, 213);
+  @override
+  Widget build(BuildContext context) {
+    return (ChangeNotifierProvider(
+        create: (context) => Players(),
+        child: Scaffold(
+          body: Stack(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/background.png'),
+                        fit: BoxFit.cover)),
+              ),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    make(context, 0),
+                    make(context, 1),
+                    make(context, 2),
+                    make(context, 3),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          resizeToAvoidBottomPadding: false,
+        )));
   }
 
-  Container _makeTagOne() {
-    return Container(
-        color: Colors.greenAccent,
-        child: Column(
-          children: <Widget>[
-            Container(
-              color: Colors.blue,
-            ),
-          ],
-        ));
-  }
+  Widget make(BuildContext context, int index) {
+    final name =
+        context.select((Players players) => players.getByIndex(index).name);
+    final lock =
+        context.select((Players players) => players.getByIndex(index).isLocked);
+    final weapon = context
+        .select((Players players) => players.getByIndex(index).weapons[0]);
 
-  Container _makeTagTwo() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return (Expanded(
+      child: Stack(
         children: <Widget>[
           Container(
-            color: Colors.blue,
-            height: 50,
-          ),
-          Container(
-            color: Colors.red,
-            width: 50,
-            height: 50,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _makeTagThree() {
-    return Container(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Container(
-          color: Colors.blue,
-          height: 50,
-        ),
-        Container(
-          color: Colors.red,
-          width: 50,
-          height: 50,
-        ),
-        Container(
-          color: Colors.green,
-          width: 50,
-          height: 50,
-        ),
-      ],
-    ));
-  }
-
-  Container _makeTagFour(void function()) {
-    return Container(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    padding: EdgeInsets.only(left: 10.0),
-                    icon: Icon(_locks[0] ? Icons.lock : Icons.lock_open),
-                    iconSize: 40.0,
-                    onPressed: function,
-                  ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: AutoSizeText(
-                    '哲学するもぐら',
-                    style: TextStyle(fontSize: 20),
-                    maxLines: 1,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    padding: EdgeInsets.only(right: 10.0),
-                    icon: Icon(Icons.settings),
-                    iconSize: 40.0,
-                    onPressed: () {},
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        _space(),
-        Expanded(
-          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/tag/tag_b.png'),
+                    fit: BoxFit.fill)),
+            margin: EdgeInsets.all(5),
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -138,33 +60,46 @@ class Tag {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        flex: 1,
-                        child: AutoSizeText(
-                          '${players[1].name}',
-                          minFontSize: 20,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
+                        flex: 6,
                         child: Container(
-                          color: Colors.transparent,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                            image: AssetImage('assets/tag/tag__name.png'),
+                            fit: BoxFit.fill,
+                          )),
+                          margin: EdgeInsets.only(left: 5, right: 5),
+                          child: Container(
+                            child: TextFormField(
+                              enabled: true,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              maxLength: 10,
+                              initialValue: name,
+                              decoration: InputDecoration(counterText: ''),
+                              onFieldSubmitted: (text) => context
+                                  .read<Players>()
+                                  .getByIndex(index)
+                                  .changeName(text),
+                            ),
+                          ),
                         ),
                       ),
                       Expanded(
-                        flex: 1,
+                        flex: 4,
+                        child: Container(
+                            //color: Colors.white30,
+                            ),
+                      ),
+                      Expanded(
+                        flex: 4,
                         child: Row(
                           children: <Widget>[
-                            Expanded(
-                              child: IconButton(
-                                icon:
-                                    Icon(_locks[1] ? Icons.lock : Icons.lock_open),
-                                onPressed: function,
-                              ),
-                            ),
-                            Expanded(
-                              child: IconButton(
-                                  icon: Icon(Icons.settings), onPressed: () {}),
-                            ),
+                            makeLockIcon(context, lock, index),
+                            makeSettingsIcon(context)
                           ],
                         ),
                       )
@@ -172,48 +107,86 @@ class Tag {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
-                  child: Text('..................................'),
-                ),
-                Expanded(
                   flex: 5,
                   child: Row(
                     children: <Widget>[
-                      Container(
-                        color: Colors.white,
-                        width: 150,
-                      ),
-                      Expanded(
-                        child: AutoSizeText(
-                          '${players[0].language}',
-                          minFontSize: 14,
-                          maxLines: 2,
-                        ),
-                      )
+                      makeWeaponSlot(context, weapon),
+                      makeWeaponNameField(context, weapon),
                     ],
                   ),
-                ),
+                )
               ],
             ),
           ),
-        ),
-        _space(),
-        Expanded(
-          child: Container(
-            color: Colors.green,
-          ),
-        ),
-        _space(),
-        Expanded(
-          child: Container(
-            color: Colors.yellow,
-          ),
-        ),
-      ],
+        ],
+      ),
     ));
   }
 
-    Container _space(){
-    return Container(color: Colors.black, height: 5,);
+  Widget makeLockIcon(BuildContext context, bool lock, int index) {
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage('assets/tag/tag__icon.png'),
+      )),
+      child: IconButton(
+        icon: Icon(
+          lock ? Icons.lock : Icons.lock_open,
+          color: _commonWhite,
+        ),
+        onPressed: () => //player.changeLocked()
+            context.read<Players>().changeLocked(index),
+      ),
+    );
+  }
+
+  Widget makeSettingsIcon(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          image:
+              DecorationImage(image: AssetImage('assets/tag/tag__icon.png'))),
+      child: IconButton(
+          icon: Icon(
+            Icons.settings,
+            color: _commonWhite,
+          ),
+          onPressed: () {}),
+    );
+  }
+
+  Widget makeWeaponSlot(BuildContext context, Weapon weapon) {
+    return Expanded(
+      flex: 3,
+      child: Container(
+        margin: EdgeInsets.all(5),
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget makeWeaponNameField(BuildContext context, Weapon weapon) {
+    return Expanded(
+      flex: 4,
+      child: Container(
+          //color: Colors.white,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/tag/tag__weaponname.png'),
+                  fit: BoxFit.fill)),
+          margin: EdgeInsets.all(5),
+          padding: EdgeInsets.all(5),
+          child: SizedBox.expand(
+              child: Center(
+            child: AutoSizeText(
+              weapon.name,
+              style: TextStyle(
+                color: _commonWhite,
+              ),
+              textAlign: TextAlign.center,
+              minFontSize: 20,
+              maxLines: 2,
+            ),
+          ))),
+    );
   }
 }
