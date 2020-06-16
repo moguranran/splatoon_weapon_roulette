@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:splatoon_weapon_roulette/Player/Players.dart';
@@ -32,6 +33,7 @@ class Tag extends StatelessWidget {
               ),
             ],
           ),
+          bottomNavigationBar: makeBottom(context),
           resizeToAvoidBottomPadding: false,
         )));
   }
@@ -41,8 +43,9 @@ class Tag extends StatelessWidget {
         context.select((Players players) => players.getByIndex(index).name);
     final lock =
         context.select((Players players) => players.getByIndex(index).isLocked);
-    final weapon = context
-        .select((Players players) => players.getByIndex(index).weapons[0]);
+    final weapon =
+        context.select((Players players) => players.getByIndex(index).weapon) ??
+            Weapon(name: 'splatoon');
 
     return (Expanded(
       child: Stack(
@@ -61,32 +64,7 @@ class Tag extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         flex: 6,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                            image: AssetImage('assets/tag/tag__name.png'),
-                            fit: BoxFit.fill,
-                          )),
-                          margin: EdgeInsets.only(left: 5, right: 5),
-                          child: Container(
-                            child: TextFormField(
-                              enabled: true,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              maxLength: 10,
-                              initialValue: name,
-                              decoration: InputDecoration(counterText: ''),
-                              onFieldSubmitted: (text) => context
-                                  .read<Players>()
-                                  .getByIndex(index)
-                                  .changeName(text),
-                            ),
-                          ),
-                        ),
+                        child: makeNameField(context, name, index),
                       ),
                       Expanded(
                         flex: 4,
@@ -111,7 +89,7 @@ class Tag extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       makeWeaponSlot(context, weapon),
-                      makeWeaponNameField(context, weapon),
+                      makeWeaponNameField(context, weapon, index),
                     ],
                   ),
                 )
@@ -121,6 +99,32 @@ class Tag extends StatelessWidget {
         ],
       ),
     ));
+  }
+
+  Widget makeNameField(BuildContext context, String name, int index) {
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage('assets/tag/tag__name.png'),
+        fit: BoxFit.fill,
+      )),
+      margin: EdgeInsets.only(left: 5, right: 5),
+      child: Container(
+        child: TextFormField(
+            enabled: true,
+            style: TextStyle(
+                color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            maxLength: 10,
+            initialValue: name,
+            decoration: InputDecoration(counterText: ''),
+            onFieldSubmitted: (text) => {
+                  context.read<Players>().getByIndex(index).changeName(text),
+                  SystemChrome.restoreSystemUIOverlays()
+                }),
+      ),
+    );
   }
 
   Widget makeLockIcon(BuildContext context, bool lock, int index) {
@@ -134,8 +138,7 @@ class Tag extends StatelessWidget {
           lock ? Icons.lock : Icons.lock_open,
           color: _commonWhite,
         ),
-        onPressed: () => //player.changeLocked()
-            context.read<Players>().changeLocked(index),
+        onPressed: () => context.read<Players>().changeLocked(index),
       ),
     );
   }
@@ -164,7 +167,7 @@ class Tag extends StatelessWidget {
     );
   }
 
-  Widget makeWeaponNameField(BuildContext context, Weapon weapon) {
+  Widget makeWeaponNameField(BuildContext context, Weapon weapon, int index) {
     return Expanded(
       flex: 4,
       child: Container(
@@ -176,17 +179,26 @@ class Tag extends StatelessWidget {
           margin: EdgeInsets.all(5),
           padding: EdgeInsets.all(5),
           child: SizedBox.expand(
-              child: Center(
-            child: AutoSizeText(
-              weapon.name,
-              style: TextStyle(
-                color: _commonWhite,
-              ),
-              textAlign: TextAlign.center,
-              minFontSize: 20,
-              maxLines: 2,
-            ),
-          ))),
+              child: InkWell(
+                  onTap: () => context.read<Players>().roulette(index),
+                  child: Center(
+                    child: AutoSizeText(
+                      weapon.name,
+                      style: TextStyle(
+                        color: _commonWhite,
+                      ),
+                      textAlign: TextAlign.center,
+                      minFontSize: 20,
+                      maxLines: 2,
+                    ),
+                  )))),
     );
+  }
+
+  Widget makeBottom(BuildContext context) {
+    return BottomNavigationBar(items: <BottomNavigationBarItem>[
+      BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('追加')),
+      BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('まとめ')),
+    ]);
   }
 }

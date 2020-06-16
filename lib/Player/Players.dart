@@ -33,14 +33,6 @@ class Players extends ChangeNotifier {
     return null;
   }
 
-  void actionWithNotify(int index, Function function) {
-    var player = getByIndex(index);
-    if (player == null) return;
-
-    function();
-    notifyListeners();
-  }
-
   void changeName(int index, String name) {
     var player = getByIndex(index);
     if (player == null) return;
@@ -57,5 +49,11 @@ class Players extends ChangeNotifier {
     notifyListeners();
   }
 
-  void roulette(int index) {}
+  void roulette(int index) {
+     var player = getByIndex(index);
+    if (player == null) return;
+
+    player.changeWeapon();
+    notifyListeners();
+  }
 }

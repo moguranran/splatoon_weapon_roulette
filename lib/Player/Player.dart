@@ -12,22 +12,24 @@ class Player extends ChangeNotifier {
   List<Weapon> weapons;
   bool _isLocked;
   bool get isLocked => _isLocked;
+  Weapon _weapon;
+  Weapon get weapon => _weapon;
 
-  Player(String name, String language, int index){
+  Player(String name, String language, int index) {
     this._name = name;
     this.language = language;
     this._index = index;
     _isLocked = false;
+    _weapon = null;
     _makeWeaponList();
   }
 
-
-  void changeName(String name){
+  void changeName(String name) {
     _name = name;
     print('$_name');
   }
 
-  void changeLocked(){
+  void changeLocked() {
     _isLocked = !isLocked;
   }
 
@@ -45,5 +47,13 @@ class Player extends ChangeNotifier {
       Weapon weapon = Weapon.fromJson(key, language: this.language);
       this.weapons.add(weapon);
     }
+  }
+
+  int count = 0;
+
+  void changeWeapon() {
+    _weapon = weapons[count];
+    count++;
+    if (count > 138) count = 0;
   }
 }

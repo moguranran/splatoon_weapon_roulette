@@ -14,4 +14,6 @@ class Weapon {
       special: json['special']['name'][language],
     );
   }
+
+  
 }
