@@ -4,9 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:splatoon_weapon_roulette/Player/Players.dart';
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
+import 'package:splatoon_weapon_roulette/presentation/custom_icon_icons.dart';
 
 class Tag extends StatelessWidget {
   final Color _commonWhite = Color.fromARGB(200, 219, 255, 213);
+  final List<String> _tagImage = [
+    'assets/tag/tag_b.png',
+    'assets/tag/tag_g.png',
+    'assets/tag/tag_p.png',
+    'assets/tag/tag_y.png'
+  ];
   @override
   Widget build(BuildContext context) {
     return (ChangeNotifierProvider(
@@ -24,21 +31,30 @@ class Tag extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    make(context, 0),
-                    make(context, 1),
-                    make(context, 2),
-                    make(context, 3),
+                    makeTag(context, 0),
+                    makeTag(context, 1),
+                    makeTag(context, 2),
+                    makeTag(context, 3),
+                    makeBottom(context)
+                    // Align(
+                    //   alignment: Alignment.bottomCenter,
+                    //   child: Theme(
+                    //     data: Theme.of(context)
+                    //         .copyWith(canvasColor: Colors.transparent),
+                    //     child: makeBottom(context),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
             ],
           ),
-          bottomNavigationBar: makeBottom(context),
+          //bottomNavigationBar: makeBottom(context),
           resizeToAvoidBottomPadding: false,
         )));
   }
 
-  Widget make(BuildContext context, int index) {
+  Widget makeTag(BuildContext context, int index) {
     final name =
         context.select((Players players) => players.getByIndex(index).name);
     final lock =
@@ -53,8 +69,7 @@ class Tag extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/tag/tag_b.png'),
-                    fit: BoxFit.fill)),
+                    image: AssetImage(_tagImage[index]), fit: BoxFit.fill)),
             margin: EdgeInsets.all(5),
             child: Column(
               children: <Widget>[
@@ -195,10 +210,63 @@ class Tag extends StatelessWidget {
     );
   }
 
+  //TODO
+  //ボトムナビゲーションバーの透過
   Widget makeBottom(BuildContext context) {
-    return BottomNavigationBar(items: <BottomNavigationBarItem>[
-      BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('追加')),
-      BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('まとめ')),
-    ]);
+    // return BottomNavigationBar(
+    //     backgroundColor: Colors.black,
+    //     items: <BottomNavigationBarItem>[
+    //       BottomNavigationBarItem(
+    //         icon: Icon(Icons.add),
+    //         title: Text('追加'),
+    //       ),
+    //       BottomNavigationBarItem(
+    //           icon: Icon(
+    //             Icons.settings,
+    //             color: _commonWhite,
+    //           ),
+    //           title: Text(
+    //             'まとめ',
+    //             style: TextStyle(color: _commonWhite),
+    //           )),
+    //     ]);
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    color: _commonWhite,
+                  ),
+                  color: Theme.of(context).accentColor,
+                  onPressed: null),
+              Text(
+                '追加',
+                style: TextStyle(color: _commonWhite),
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    CustomIcon.roulette_start,
+                    color: _commonWhite,
+                  ),
+                  color: Theme.of(context).accentColor,
+                  onPressed: null),
+              Text(
+                '設定',
+                style: TextStyle(color: _commonWhite),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
