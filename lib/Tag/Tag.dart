@@ -24,7 +24,7 @@ class Tag extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/background.png'),
+                        image: AssetImage('assets/background_high.png'),
                         fit: BoxFit.cover)),
               ),
               Container(
@@ -35,21 +35,12 @@ class Tag extends StatelessWidget {
                     makeTag(context, 1),
                     makeTag(context, 2),
                     makeTag(context, 3),
-                    makeBottom(context)
-                    // Align(
-                    //   alignment: Alignment.bottomCenter,
-                    //   child: Theme(
-                    //     data: Theme.of(context)
-                    //         .copyWith(canvasColor: Colors.transparent),
-                    //     child: makeBottom(context),
-                    //   ),
-                    // ),
+                    makeBottom(context)                    
                   ],
                 ),
               ),
             ],
           ),
-          //bottomNavigationBar: makeBottom(context),
           resizeToAvoidBottomPadding: false,
         )));
   }
@@ -133,7 +124,8 @@ class Tag extends StatelessWidget {
             maxLines: 1,
             maxLength: 10,
             initialValue: name,
-            decoration: InputDecoration(counterText: ''),
+            decoration:
+                InputDecoration(counterText: '', border: InputBorder.none),
             onFieldSubmitted: (text) => {
                   context.read<Players>().getByIndex(index).changeName(text),
                   SystemChrome.restoreSystemUIOverlays()
@@ -176,9 +168,25 @@ class Tag extends StatelessWidget {
     return Expanded(
       flex: 3,
       child: Container(
-        margin: EdgeInsets.all(5),
-        color: Colors.white,
-      ),
+          padding: EdgeInsets.all(5),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/tag/tag__weapon.png'),
+                        fit: BoxFit.fill)),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: weapon.imagePath != null
+                            ? AssetImage(weapon.imagePath)
+                            : AssetImage('assets/tag/tag__weapon.png'),
+                        fit: BoxFit.fill)),
+              ),
+            ],
+          )),
     );
   }
 
@@ -186,7 +194,6 @@ class Tag extends StatelessWidget {
     return Expanded(
       flex: 4,
       child: Container(
-          //color: Colors.white,
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/tag/tag__weaponname.png'),
@@ -210,26 +217,8 @@ class Tag extends StatelessWidget {
     );
   }
 
-  //TODO
-  //ボトムナビゲーションバーの透過
+  //TODO:ボトムナビゲーションバーの透過
   Widget makeBottom(BuildContext context) {
-    // return BottomNavigationBar(
-    //     backgroundColor: Colors.black,
-    //     items: <BottomNavigationBarItem>[
-    //       BottomNavigationBarItem(
-    //         icon: Icon(Icons.add),
-    //         title: Text('追加'),
-    //       ),
-    //       BottomNavigationBarItem(
-    //           icon: Icon(
-    //             Icons.settings,
-    //             color: _commonWhite,
-    //           ),
-    //           title: Text(
-    //             'まとめ',
-    //             style: TextStyle(color: _commonWhite),
-    //           )),
-    //     ]);
     return Align(
       alignment: Alignment.bottomCenter,
       child: Row(
@@ -255,7 +244,7 @@ class Tag extends StatelessWidget {
               IconButton(
                   icon: Icon(
                     CustomIcon.roulette_start,
-                    color: _commonWhite,
+                    color: Colors.orange,
                   ),
                   color: Theme.of(context).accentColor,
                   onPressed: null),
