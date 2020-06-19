@@ -49,8 +49,16 @@ class Players extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeWeaponCondition(int index, bool mainChecked, bool subChecked, bool specialChecked){
+    var player = getByIndex(index);
+    if (player == null) return;
+
+    player.setWeaponList(mainChecked, subChecked, specialChecked);
+    notifyListeners();
+  }
+
   void roulette(int index) {
-     var player = getByIndex(index);
+    var player = getByIndex(index);
     if (player == null) return;
 
     player.changeWeapon();

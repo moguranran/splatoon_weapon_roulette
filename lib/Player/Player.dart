@@ -38,14 +38,22 @@ class Player extends ChangeNotifier {
     String _loadData = await rootBundle.loadString('assets/weapon.json');
     List js = await jsonDecode(_loadData);
 
-    await _setWeaponList(js);
+    await _makeList(js);
     return;
   }
 
-  dynamic _setWeaponList(List js) {
+  dynamic _makeList(List js) {
     for (var key in js) {
       Weapon weapon = Weapon.fromJson(key, language: this.language);
       this.weapons.add(weapon);
+    }
+  }
+
+  void setWeaponList(bool mainChecked, bool subChecked, bool specialChecked){
+    for (var weapon in weapons) {
+      weapon.changeChecked(weapon.mainWeapon, mainChecked);
+      weapon.changeChecked(weapon.subWeapon, subChecked);
+      weapon.changeChecked(weapon.specialWeapon, specialChecked);
     }
   }
 
@@ -53,9 +61,13 @@ class Player extends ChangeNotifier {
 
   void changeWeapon() {
     if (isLocked) return;
-    
+
     _weapon = weapons[count];
     count++;
     if (count > 138) count = 0;
+  }
+
+  void roulette(){
+
   }
 }
