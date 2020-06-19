@@ -52,6 +52,8 @@ class Player extends ChangeNotifier {
   int count = 0;
 
   void changeWeapon() {
+    if (isLocked) return;
+    
     _weapon = weapons[count];
     count++;
     if (count > 138) count = 0;
