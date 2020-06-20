@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:splatoon_weapon_roulette/Player/Players.dart';
+import 'package:splatoon_weapon_roulette/Tag/SettingPage.dart';
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 import 'package:splatoon_weapon_roulette/presentation/custom_icon_icons.dart';
 
@@ -35,7 +36,7 @@ class Tag extends StatelessWidget {
                     makeTag(context, 1),
                     makeTag(context, 2),
                     makeTag(context, 3),
-                    makeBottom(context)                    
+                    makeBottom(context)
                   ],
                 ),
               ),
@@ -83,7 +84,7 @@ class Tag extends StatelessWidget {
                         child: Row(
                           children: <Widget>[
                             makeLockIcon(context, lock, index),
-                            makeSettingsIcon(context)
+                            makeSettingsIcon(context, index)
                           ],
                         ),
                       )
@@ -150,7 +151,10 @@ class Tag extends StatelessWidget {
     );
   }
 
-  Widget makeSettingsIcon(BuildContext context) {
+  Widget makeSettingsIcon(BuildContext context, int index) {
+    final player =
+        context.select((Players players) => players.getByIndex(index));
+
     return Container(
       decoration: BoxDecoration(
           image:
@@ -160,7 +164,9 @@ class Tag extends StatelessWidget {
             Icons.settings,
             color: _commonWhite,
           ),
-          onPressed: () {}),
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => SettingPage(
+                  player: player)))),
     );
   }
 

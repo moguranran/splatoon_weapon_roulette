@@ -26,7 +26,6 @@ class Player extends ChangeNotifier {
 
   void changeName(String name) {
     _name = name;
-    print('$_name');
   }
 
   void changeLocked() {
