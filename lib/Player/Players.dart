@@ -53,7 +53,7 @@ class Players extends ChangeNotifier {
     var player = getByIndex(index);
     if (player == null) return;
 
-    player.changeWeapon();
+    player.roulette();
     notifyListeners();
   }
 }

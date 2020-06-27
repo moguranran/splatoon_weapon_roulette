@@ -32,6 +32,13 @@ class Weapon {
     print(
         'main:${mainWeapon.type} , sub:${subWeapon.type} , special:${specialWeapon.type}');
   }
+
+  bool isCandidate() {
+    if (mainWeapon.isChecked && subWeapon.isChecked && specialWeapon.isChecked)
+      return true;
+
+    return false;
+  }
 }
 
 class WeaponType {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
@@ -10,6 +11,7 @@ class Player extends ChangeNotifier {
   int _index;
   int get index => _index;
   List<Weapon> weapons;
+  List<Weapon> _candidates;
   bool _isLocked;
   bool get isLocked => _isLocked;
   Weapon _weapon;
@@ -93,24 +95,8 @@ class Player extends ChangeNotifier {
       Weapon weapon = Weapon.fromJson(key, language: this.language);
       this.weapons.add(weapon);
     }
-  }
 
-  // void setWeaponList(bool mainChecked, bool subChecked, bool specialChecked) {
-  //   for (var weapon in weapons) {
-  //     weapon.changeChecked(weapon.mainWeapon, mainChecked);
-  //     weapon.changeChecked(weapon.subWeapon, subChecked);
-  //     weapon.changeChecked(weapon.specialWeapon, specialChecked);
-  //   }
-  // }
-
-  int count = 0;
-
-  void changeWeapon() {
-    if (isLocked) return;
-
-    _weapon = weapons[count];
-    count++;
-    if (count > 138) count = 0;
+    _candidates = weapons;
   }
 
   void changeWeaponsState(String weapon, String key, bool isChecked) {
@@ -118,10 +104,25 @@ class Player extends ChangeNotifier {
     if (weaponType == null) return;
 
     weaponType[key] = isChecked;
+
+    if(weaponType.values.every((element) => element == false))
+    weaponType[key] = !isChecked;
     
     weaponType.forEach((key, value) {
-      print('$name  $key is $value');
+      weapons
+          .where((element) => element.mainWeapon.type == key)
+          .forEach((element) => element.mainWeapon.changeChecked(value));
+      
+      weapons
+          .where((element) => element.subWeapon.type == key)
+          .forEach((element) => element.subWeapon.changeChecked(value));
+      
+      weapons
+          .where((element) => element.specialWeapon.type == key)
+          .forEach((element) => element.specialWeapon.changeChecked(value));
     });
+
+    _makeCandiateWeapons();
   }
 
   Map _checkWeaponType(String weapon, String key) {
@@ -136,5 +137,43 @@ class Player extends ChangeNotifier {
     return null;
   }
 
-  void roulette() {}
+  void _makeCandiateWeapons() {
+    _candidates = weapons.where((weapon) => weapon.isCandidate()).toList();
+
+    if (_candidates == null || _candidates.length == 0) _candidates = weapons;
+
+    _shuffle();
+
+    _weaponIndex = 0;
+  }
+
+  void _shuffle(){
+    int n = _candidates.length - 1;
+    var rand = Random();
+    var tmpList = List<Weapon>(_candidates.length);
+
+    while(n >= 0){
+      int index = rand.nextInt(_candidates.length);
+
+      if(tmpList[n] == null && _candidates[index] != null){
+        tmpList[n]  = _candidates[index];
+        _candidates[index] = null;
+        n--;
+      }
+    }
+
+    _candidates = tmpList;
+  }
+
+  int _weaponIndex = 0;
+
+  void roulette() {
+    print(_candidates.length);
+
+    if(isLocked) return;
+
+    _weapon = _candidates[_weaponIndex];
+    _weaponIndex++;
+    if (_weaponIndex >= _candidates.length) _weaponIndex = 0;
+  }
 }
