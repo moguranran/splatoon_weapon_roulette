@@ -15,13 +15,60 @@ class Player extends ChangeNotifier {
   Weapon _weapon;
   Weapon get weapon => _weapon;
 
+  Map<String, bool> mainWeapon = {
+    'shooter': true,
+    'blaster': true,
+    'reelgun': true,
+    'roller': true,
+    'brush': true,
+    'charger': true,
+    'slosher': true,
+    'splatling': true,
+    'maneuver': true,
+    'brella': true,
+  };
+
+  Map<String, bool> subWeapon = {
+    'splashbomb': true,
+    'kyubanbomb': true,
+    'quickbomb': true,
+    'curlingbomb': true,
+    'robotbomb': true,
+    'trap': true,
+    'sprinkler': true,
+    'poisonmist': true,
+    'pointsensor': true,
+    'splashshield': true,
+    'jumpbeacon': true,
+    'tansanbomb': true,
+    'torpedo': true,
+  };
+
+  Map<String, bool> specialWeapon = {
+    'missile': true,
+    'armor': true,
+    'splashbomb_pitcher': true,
+    'kyubanbomb_pitcher': true,
+    'quickbomb_pitcher': true,
+    'curlingbomb_pitcher': true,
+    'robotbomb_pitcher': true,
+    'presser': true,
+    'jetpack': true,
+    'chakuchi': true,
+    'amefurashi': true,
+    'sphere': true,
+    'bubble': true,
+    'nicedama': true,
+    'ultrahanko': true,
+  };
+
   Player(String name, String language, int index) {
     this._name = name;
     this.language = language;
     this._index = index;
     _isLocked = false;
     _weapon = null;
-    _makeWeaponList();
+    _initWeaponList();
   }
 
   void changeName(String name) {
@@ -32,7 +79,7 @@ class Player extends ChangeNotifier {
     _isLocked = !isLocked;
   }
 
-  void _makeWeaponList() async {
+  void _initWeaponList() async {
     weapons = [];
     String _loadData = await rootBundle.loadString('assets/weapon.json');
     List js = await jsonDecode(_loadData);
@@ -48,13 +95,13 @@ class Player extends ChangeNotifier {
     }
   }
 
-  void setWeaponList(bool mainChecked, bool subChecked, bool specialChecked){
-    for (var weapon in weapons) {
-      weapon.changeChecked(weapon.mainWeapon, mainChecked);
-      weapon.changeChecked(weapon.subWeapon, subChecked);
-      weapon.changeChecked(weapon.specialWeapon, specialChecked);
-    }
-  }
+  // void setWeaponList(bool mainChecked, bool subChecked, bool specialChecked) {
+  //   for (var weapon in weapons) {
+  //     weapon.changeChecked(weapon.mainWeapon, mainChecked);
+  //     weapon.changeChecked(weapon.subWeapon, subChecked);
+  //     weapon.changeChecked(weapon.specialWeapon, specialChecked);
+  //   }
+  // }
 
   int count = 0;
 
@@ -66,7 +113,28 @@ class Player extends ChangeNotifier {
     if (count > 138) count = 0;
   }
 
-  void roulette(){
+  void changeWeaponsState(String weapon, String key, bool isChecked) {
+    var weaponType = _checkWeaponType(weapon, key);
+    if (weaponType == null) return;
 
+    weaponType[key] = isChecked;
+    
+    weaponType.forEach((key, value) {
+      print('$name  $key is $value');
+    });
   }
+
+  Map _checkWeaponType(String weapon, String key) {
+    var weaponType = weapon.substring(0, weapon.length - 'weapon'.length);
+    if (weaponType != 'main' && weaponType != 'sub' && weaponType != 'special')
+      return null;
+
+    if (mainWeapon.containsKey(key)) return mainWeapon;
+    if (subWeapon.containsKey(key)) return subWeapon;
+    if (specialWeapon.containsKey(key)) return specialWeapon;
+
+    return null;
+  }
+
+  void roulette() {}
 }
