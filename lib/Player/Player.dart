@@ -17,6 +17,42 @@ class Player extends ChangeNotifier {
   Weapon _weapon;
   Weapon get weapon => _weapon;
 
+  _changeWeaponLanguage() {
+    for (var i = 0; i < mainWeapon.length; i++) {
+      var weaponTypeString = weapons
+          .firstWhere((element) =>
+              element.mainWeapon.type == mainWeapon.keys.elementAt(i))
+          .mainWeapon
+          .names[language]
+          .toString();
+      var target = mainWeapon.keys.elementAt(i);
+      mainWeaponName[target] = weaponTypeString;
+    }
+
+    for (var i = 0; i < subWeapon.length; i++) {
+      var weaponTypeString = weapons
+          .firstWhere((element) =>
+              element.subWeapon.type == subWeapon.keys.elementAt(i))
+          .subWeapon
+          .names[language]
+          .toString();
+      var target = subWeapon.keys.elementAt(i);
+      subWeaponName[target] = weaponTypeString;
+    }
+
+    for (var i = 0; i < specialWeapon.length; i++) {
+      var weaponTypeString = weapons
+          .firstWhere((element) =>
+              element.specialWeapon.type == specialWeapon.keys.elementAt(i))
+          .specialWeapon
+          .names[language]
+          .toString();
+      var target = specialWeapon.keys.elementAt(i);
+      specialWeaponName[target] = weaponTypeString;
+    }
+  }
+
+
   Map<String, bool> mainWeapon = {
     'shooter': true,
     'blaster': true,
@@ -30,6 +66,20 @@ class Player extends ChangeNotifier {
     'brella': true,
   };
 
+  Map<String, String> mainWeaponName = {
+    'shooter': 'Shooter',
+    'blaster': 'Blaster',
+    'reelgun': 'Reelgun',
+    'roller': 'Roller',
+    'brush': 'Brush',
+    'charger': 'Charger',
+    'slosher': 'Slosher',
+    'splatling': 'Splatling',
+    'maneuver': 'Maneuver',
+    'brella': 'Brella',
+  };
+
+  
   Map<String, bool> subWeapon = {
     'splashbomb': true,
     'kyubanbomb': true,
@@ -44,6 +94,22 @@ class Player extends ChangeNotifier {
     'jumpbeacon': true,
     'tansanbomb': true,
     'torpedo': true,
+  };
+
+    Map<String, String> subWeaponName = {
+    'splashbomb': 'Splashbomb',
+    'kyubanbomb': 'Kyubanbomb',
+    'quickbomb': 'Quickbomb',
+    'curlingbomb': 'Curlingbomb',
+    'robotbomb': 'Robotbomb',
+    'trap': 'Trap',
+    'sprinkler': 'Sprinkler',
+    'poisonmist': 'Poisonmist',
+    'pointsensor': 'Pointsensor',
+    'splashshield': 'Splashshield',
+    'jumpbeacon': 'Jumpbeacon',
+    'tansanbomb': 'Tansanbomb',
+    'torpedo': 'Torpedo',
   };
 
   Map<String, bool> specialWeapon = {
@@ -62,6 +128,24 @@ class Player extends ChangeNotifier {
     'bubble': true,
     'nicedama': true,
     'ultrahanko': true,
+  };
+
+  Map<String, String> specialWeaponName = {
+    'missile': 'Missile',
+    'armor': 'Armor',
+    'splashbomb_pitcher': 'Splashbomb_pitcher',
+    'kyubanbomb_pitcher': 'Kyubanbomb_pitcher',
+    'quickbomb_pitcher': 'Quickbomb_pitcher',
+    'curlingbomb_pitcher': 'Curlingbomb_pitcher',
+    'robotbomb_pitcher': 'Robotbomb_pitcher',
+    'presser': 'Presser',
+    'jetpack': 'Jetpack',
+    'chakuchi': 'Chakuchi',
+    'amefurashi': 'Amefurashi',
+    'sphere': 'Sphere',
+    'bubble': 'Bubble',
+    'nicedama': 'Nicedama',
+    'ultrahanko': 'Ultrahanko',
   };
 
   Player(String name, String language, int index) {
@@ -97,6 +181,7 @@ class Player extends ChangeNotifier {
     }
 
     _candidates = weapons;
+    _changeWeaponLanguage();
   }
 
   void changeWeaponsState(String weapon, String key, bool isChecked) {
@@ -105,18 +190,18 @@ class Player extends ChangeNotifier {
 
     weaponType[key] = isChecked;
 
-    if(weaponType.values.every((element) => element == false))
-    weaponType[key] = !isChecked;
-    
+    if (weaponType.values.every((element) => element == false))
+      weaponType[key] = !isChecked;
+
     weaponType.forEach((key, value) {
       weapons
           .where((element) => element.mainWeapon.type == key)
           .forEach((element) => element.mainWeapon.changeChecked(value));
-      
+
       weapons
           .where((element) => element.subWeapon.type == key)
           .forEach((element) => element.subWeapon.changeChecked(value));
-      
+
       weapons
           .where((element) => element.specialWeapon.type == key)
           .forEach((element) => element.specialWeapon.changeChecked(value));
@@ -147,16 +232,16 @@ class Player extends ChangeNotifier {
     _weaponIndex = 0;
   }
 
-  void _shuffle(){
+  void _shuffle() {
     int n = _candidates.length - 1;
     var rand = Random();
     var tmpList = List<Weapon>(_candidates.length);
 
-    while(n >= 0){
+    while (n >= 0) {
       int index = rand.nextInt(_candidates.length);
 
-      if(tmpList[n] == null && _candidates[index] != null){
-        tmpList[n]  = _candidates[index];
+      if (tmpList[n] == null && _candidates[index] != null) {
+        tmpList[n] = _candidates[index];
         _candidates[index] = null;
         n--;
       }
@@ -170,7 +255,7 @@ class Player extends ChangeNotifier {
   void roulette() {
     print(_candidates.length);
 
-    if(isLocked) return;
+    if (isLocked) return;
 
     _weapon = _candidates[_weaponIndex];
     _weaponIndex++;

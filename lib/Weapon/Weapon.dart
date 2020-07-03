@@ -18,9 +18,9 @@ class Weapon {
       {String language = 'ja_JP'}) {
     return new Weapon(
         name: json['name'][language],
-        mainWeapon: MainWeapon(json['type']['key']),
-        subWeapon: SubWeapon(json['sub']['key']),
-        specialWeapon: SpecialWeapon(json['special']['key']),
+        mainWeapon: MainWeapon(json['type']['key'], json['type']['name']),
+        subWeapon: SubWeapon(json['sub']['key'], json['sub']['name']),
+        specialWeapon: SpecialWeapon(json['special']['key'], json['special']['name']),
         imagePath: 'lib/Weapon/Images/${json['key']}.jpg');
   }
 
@@ -43,6 +43,7 @@ class Weapon {
 
 class WeaponType {
   final String type;
+  final Map<String, dynamic> names;
   bool _isChecked = true;
   get isChecked => _isChecked;
   bool _isChoiced = false;
@@ -52,17 +53,21 @@ class WeaponType {
     _isChecked = isChecked;
   }
 
-  WeaponType(this.type);
+  WeaponType(this.type, this.names);
+
+  void changeLanguage(String language){
+    
+  }
 }
 
 class MainWeapon extends WeaponType {
-  MainWeapon(String mainType) : super(mainType);
+  MainWeapon(String mainType, Map<String, dynamic> names) : super(mainType, names);
 }
 
 class SubWeapon extends WeaponType {
-  SubWeapon(String subType) : super(subType);
+  SubWeapon(String subType, Map<String, dynamic> names) : super(subType, names);
 }
 
 class SpecialWeapon extends WeaponType {
-  SpecialWeapon(String specialType) : super(specialType);
+  SpecialWeapon(String specialType, Map<String, dynamic> names) : super(specialType, names);
 }

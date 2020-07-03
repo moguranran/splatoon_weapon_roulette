@@ -50,9 +50,10 @@ class _ChangeFormState extends State<SettingPage> {
                     itemCount: player.mainWeapon.length,
                     itemBuilder: (BuildContext context, int index) {
                       String key = player.mainWeapon.keys.elementAt(index);
+                      String weaponTypeName = player.mainWeaponName[key];
                       return CheckboxListTile(
                         activeColor: Colors.blue,
-                        title: Text(key),
+                        title: Text(weaponTypeName),
                         controlAffinity: ListTileControlAffinity.leading,
                         value: player.mainWeapon[key],
                         onChanged: (bool value) {
@@ -79,9 +80,10 @@ class _ChangeFormState extends State<SettingPage> {
                     itemCount: player.subWeapon.length,
                     itemBuilder: (BuildContext context, int index) {
                       String key = player.subWeapon.keys.elementAt(index);
+                      String weaponTypeName = player.subWeaponName[key];
                       return CheckboxListTile(
                         activeColor: Colors.orange,
-                        title: Text(key),
+                        title: Text(weaponTypeName),
                         controlAffinity: ListTileControlAffinity.leading,
                         value: player.subWeapon[key],
                         onChanged: (bool value) {
@@ -109,9 +111,10 @@ class _ChangeFormState extends State<SettingPage> {
                         itemBuilder: (BuildContext context, int index) {
                           String key =
                               player.specialWeapon.keys.elementAt(index);
+                              String weaponTypeName = player.specialWeaponName[key];
                           return CheckboxListTile(
                             activeColor: Colors.pink,
-                            title: Text(key),
+                            title: Text(weaponTypeName),
                             controlAffinity: ListTileControlAffinity.leading,
                             value: player.specialWeapon[key],
                             onChanged: (bool value) {
