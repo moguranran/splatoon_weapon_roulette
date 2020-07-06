@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:splatoon_weapon_roulette/Weapon/Weapon.dart';
 
@@ -52,7 +53,6 @@ class Player extends ChangeNotifier {
     }
   }
 
-
   Map<String, bool> mainWeapon = {
     'shooter': true,
     'blaster': true,
@@ -79,7 +79,6 @@ class Player extends ChangeNotifier {
     'brella': 'Brella',
   };
 
-  
   Map<String, bool> subWeapon = {
     'splashbomb': true,
     'kyubanbomb': true,
@@ -96,7 +95,7 @@ class Player extends ChangeNotifier {
     'torpedo': true,
   };
 
-    Map<String, String> subWeaponName = {
+  Map<String, String> subWeaponName = {
     'splashbomb': 'Splashbomb',
     'kyubanbomb': 'Kyubanbomb',
     'quickbomb': 'Quickbomb',
@@ -224,8 +223,10 @@ class Player extends ChangeNotifier {
 
   void _makeCandiateWeapons() {
     _candidates = weapons.where((weapon) => weapon.isCandidate()).toList();
+    print(_candidates.length);
 
-    if (_candidates == null || _candidates.length == 0) _candidates = weapons;
+    // if (_candidates == null || _candidates.length == 0) _candidates = weapons.toList();
+    if (_candidates == null || _candidates.length == 0) return;
 
     _shuffle();
 
@@ -260,5 +261,12 @@ class Player extends ChangeNotifier {
     _weapon = _candidates[_weaponIndex];
     _weaponIndex++;
     if (_weaponIndex >= _candidates.length) _weaponIndex = 0;
+  }
+
+  bool changeState(String weapon, String key, bool isChecked) {
+    changeWeaponsState(weapon, key, isChecked);
+    
+    if (_candidates.length == 0) return false;
+    return true;
   }
 }

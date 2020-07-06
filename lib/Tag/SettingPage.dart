@@ -58,7 +58,31 @@ class _ChangeFormState extends State<SettingPage> {
                         value: player.mainWeapon[key],
                         onChanged: (bool value) {
                           setState(() {
-                            player.changeWeaponsState('mainWeapon', key, value);
+                            // player.changeWeaponsState('mainWeapon', key, value);
+                            bool hasCandidate =
+                                player.changeState('mainWeapon', key, value);
+                            if (!hasCandidate)
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        title: Text('Alert'),
+                                        content: Text('そんな条件には合わんよ'),
+                                        actions: <Widget>[
+                                          SimpleDialogOption(
+                                            child: Text('OK'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          SimpleDialogOption(
+                                            child: Text('No'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          )
+                                        ],
+                                      ));
                           });
                         },
                       );
@@ -111,7 +135,7 @@ class _ChangeFormState extends State<SettingPage> {
                         itemBuilder: (BuildContext context, int index) {
                           String key =
                               player.specialWeapon.keys.elementAt(index);
-                              String weaponTypeName = player.specialWeaponName[key];
+                          String weaponTypeName = player.specialWeaponName[key];
                           return CheckboxListTile(
                             activeColor: Colors.pink,
                             title: Text(weaponTypeName),
