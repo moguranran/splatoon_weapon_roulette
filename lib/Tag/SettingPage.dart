@@ -12,9 +12,19 @@ class SettingPage extends StatefulWidget {
 
 class _ChangeFormState extends State<SettingPage> {
   Player player;
+  List<String> weaponGenreTitle = ['メイン', 'サブ', 'スペシャル'];
+  List<String> weaponGenreString = ['mainWeapon', 'subWeapon', 'specialWeapon'];
+  List<Map<String, bool>> weaponGenre;
+  List<Map<String, String>> weaponGenreName;
 
   _ChangeFormState(Player player) {
     this.player = player;
+    weaponGenre = [player.mainWeapon, player.subWeapon, player.specialWeapon];
+    weaponGenreName = [
+      player.mainWeaponName,
+      player.subWeaponName,
+      player.specialWeaponName
+    ];
   }
 
   @override
@@ -27,9 +37,9 @@ class _ChangeFormState extends State<SettingPage> {
         child: Center(
           child: Column(
             children: <Widget>[
-              makeMainCheckList(context),
-              makeSubCheckList(context),
-              makeSpecialCheckList(context),
+              makeCheckList(context, 0),
+              makeCheckList(context, 1),
+              makeCheckList(context, 2),
             ],
           ),
         ),
@@ -37,37 +47,37 @@ class _ChangeFormState extends State<SettingPage> {
     );
   }
 
-  Widget makeMainCheckList(BuildContext context) {
+  Widget makeCheckList(BuildContext context, int weaponIndex) {
     return Container(
         decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
         child: ExpandableNotifier(
             child: ExpandablePanel(
-                header: Text('メイン'),
+                header: Text(weaponGenreTitle[weaponIndex]),
                 expanded: ScrollOnExpand(
                     child: Container(
                   height: 300,
                   child: ListView.builder(
-                    itemCount: player.mainWeapon.length,
+                    itemCount: weaponGenre[weaponIndex].length,
                     itemBuilder: (BuildContext context, int index) {
-                      String key = player.mainWeapon.keys.elementAt(index);
-                      String weaponTypeName = player.mainWeaponName[key];
+                      String key =
+                          weaponGenre[weaponIndex].keys.elementAt(index);
+                      String weaponTypeName = weaponGenreName[weaponIndex][key];
                       return CheckboxListTile(
                         activeColor: Colors.blue,
                         title: Text(weaponTypeName),
                         controlAffinity: ListTileControlAffinity.leading,
-                        value: player.mainWeapon[key],
+                        value: weaponGenre[weaponIndex][key],
                         onChanged: (bool value) {
                           setState(() {
-                            // player.changeWeaponsState('mainWeapon', key, value);
-                            bool hasCandidate =
-                                player.changeState('mainWeapon', key, value);
+                            bool hasCandidate = player.changeState(
+                                weaponGenreString[weaponIndex], key, value);
                             if (!hasCandidate)
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
                                       AlertDialog(
-                                        title: Text('Alert'),
-                                        content: Text('そんな条件には合わんよ'),
+                                        content:
+                                            Text('見つかりませんでした。\n条件を変更してください。'),
                                         actions: <Widget>[
                                           SimpleDialogOption(
                                             child: Text('OK'),
@@ -75,12 +85,6 @@ class _ChangeFormState extends State<SettingPage> {
                                               Navigator.pop(context);
                                             },
                                           ),
-                                          SimpleDialogOption(
-                                            child: Text('No'),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          )
                                         ],
                                       ));
                           });
@@ -89,67 +93,5 @@ class _ChangeFormState extends State<SettingPage> {
                     },
                   ),
                 )))));
-  }
-
-  Widget makeSubCheckList(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
-        child: ExpandableNotifier(
-            child: ExpandablePanel(
-                header: Text('サブ'),
-                expanded: ScrollOnExpand(
-                    child: Container(
-                  height: 300,
-                  child: ListView.builder(
-                    itemCount: player.subWeapon.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      String key = player.subWeapon.keys.elementAt(index);
-                      String weaponTypeName = player.subWeaponName[key];
-                      return CheckboxListTile(
-                        activeColor: Colors.orange,
-                        title: Text(weaponTypeName),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        value: player.subWeapon[key],
-                        onChanged: (bool value) {
-                          setState(() {
-                            player.changeWeaponsState('subWeapon', key, value);
-                          });
-                        },
-                      );
-                    },
-                  ),
-                )))));
-  }
-
-  Widget makeSpecialCheckList(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
-        child: ExpandableNotifier(
-            child: ExpandablePanel(
-                header: Text('スペシャル'),
-                expanded: ScrollOnExpand(
-                  child: Container(
-                      height: 300,
-                      child: ListView.builder(
-                        itemCount: player.specialWeapon.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          String key =
-                              player.specialWeapon.keys.elementAt(index);
-                          String weaponTypeName = player.specialWeaponName[key];
-                          return CheckboxListTile(
-                            activeColor: Colors.pink,
-                            title: Text(weaponTypeName),
-                            controlAffinity: ListTileControlAffinity.leading,
-                            value: player.specialWeapon[key],
-                            onChanged: (bool value) {
-                              setState(() {
-                                player.changeWeaponsState(
-                                    'specialWeapon', key, value);
-                              });
-                            },
-                          );
-                        },
-                      )),
-                ))));
   }
 }
