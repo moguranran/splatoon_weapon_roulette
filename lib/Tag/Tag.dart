@@ -165,8 +165,7 @@ class Tag extends StatelessWidget {
             color: _commonWhite,
           ),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SettingPage(
-                  player: player)))),
+              builder: (context) => SettingPage(player: player)))),
     );
   }
 
@@ -228,37 +227,43 @@ class Tag extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: _commonWhite,
-                  ),
-                  color: Theme.of(context).accentColor,
-                  onPressed: null),
-              Text(
-                '追加',
-                style: TextStyle(color: _commonWhite),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: _commonWhite,
+                    ),
+                    color: Theme.of(context).accentColor,
+                    onPressed: null),
+                Text(
+                  '追加',
+                  style: TextStyle(color: _commonWhite),
+                ),
+              ],
+            ),
           ),
-          Column(
-            children: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    CustomIcon.roulette_start,
-                    color: Colors.orange,
-                  ),
-                  color: Theme.of(context).accentColor,
-                  onPressed: () => context.read<Players>().rouletteAll(),),
-              Text(
-                'ルーレット',
-                style: TextStyle(color: _commonWhite),
-              )
-            ],
+          Expanded(
+            child: InkWell(
+                onTap: () => context.read<Players>().rouletteAll(),
+                child: Column(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        CustomIcon.roulette_start,
+                        color: Colors.orange,
+                      ),
+                      color: Theme.of(context).accentColor,
+                      onPressed: () => context.read<Players>().rouletteAll(),
+                    ),
+                    Text(
+                      'ルーレット',
+                      style: TextStyle(color: _commonWhite),
+                    )
+                  ],
+                )),
           )
         ],
       ),
