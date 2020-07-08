@@ -224,9 +224,7 @@ class Player extends ChangeNotifier {
 
   void _makeCandiateWeapons() {
     _candidates = weapons.where((weapon) => weapon.isCandidate()).toList();
-    print(_candidates.length);
-
-    // if (_candidates == null || _candidates.length == 0) _candidates = weapons.toList();
+    
     if (_candidates == null || _candidates.length == 0) return;
 
     _shuffle();
@@ -260,6 +258,7 @@ class Player extends ChangeNotifier {
     _weapon = _candidates[_weaponIndex];
     _weaponIndex++;
     if (_weaponIndex >= _candidates.length) _weaponIndex = 0;
+    _shuffle();
   }
 
   bool changeState(String weapon, String key, bool isChecked) {
