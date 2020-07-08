@@ -1,3 +1,5 @@
+import 'package:splatoon_weapon_roulette/main.dart';
+
 import 'Player.dart';
 import 'package:flutter/foundation.dart';
 
@@ -54,6 +56,11 @@ class Players extends ChangeNotifier {
     if (player == null) return;
 
     player.roulette();
+    notifyListeners();
+  }
+
+  void rouletteAll(){
+    players.forEach((player) => player.roulette());
     notifyListeners();
   }
 }

@@ -253,9 +253,9 @@ class Tag extends StatelessWidget {
                     color: Colors.orange,
                   ),
                   color: Theme.of(context).accentColor,
-                  onPressed: null),
+                  onPressed: () => context.read<Players>().rouletteAll(),),
               Text(
-                '設定',
+                'ルーレット',
                 style: TextStyle(color: _commonWhite),
               )
             ],

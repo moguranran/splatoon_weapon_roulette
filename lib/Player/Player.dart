@@ -170,6 +170,7 @@ class Player extends ChangeNotifier {
     List js = await jsonDecode(_loadData);
 
     await _makeList(js);
+    _makeCandiateWeapons();
     return;
   }
 
@@ -254,8 +255,6 @@ class Player extends ChangeNotifier {
   int _weaponIndex = 0;
 
   void roulette() {
-    print(_candidates.length);
-
     if (isLocked) return;
 
     _weapon = _candidates[_weaponIndex];
