@@ -1,5 +1,3 @@
-import 'package:splatoon_weapon_roulette/main.dart';
-
 import 'Player.dart';
 import 'package:flutter/foundation.dart';
 
@@ -22,9 +20,9 @@ class Players extends ChangeNotifier {
   Players() {
     players = new List(4);
     players[0] = new Player('プレイヤー1', languages[8], 0);
-    players[1] = new Player('プレイヤー2', languages[0], 1);
-    players[2] = new Player('プレイヤー3', languages[1], 2);
-    players[3] = new Player('プレイヤー4', languages[3], 3);
+    players[1] = new Player('プレイヤー2', languages[8], 1);
+    players[2] = new Player('プレイヤー3', languages[8], 2);
+    players[3] = new Player('プレイヤー4', languages[8], 3);
   }
 
   Player getByIndex(index) {

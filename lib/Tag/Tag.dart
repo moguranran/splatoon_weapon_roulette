@@ -95,7 +95,7 @@ class Tag extends StatelessWidget {
                   flex: 5,
                   child: Row(
                     children: <Widget>[
-                      makeWeaponSlot(context, weapon),
+                      makeWeaponSlot(context, weapon, index),
                       makeWeaponNameField(context, weapon, index),
                     ],
                   ),
@@ -169,7 +169,7 @@ class Tag extends StatelessWidget {
     );
   }
 
-  Widget makeWeaponSlot(BuildContext context, Weapon weapon) {
+  Widget makeWeaponSlot(BuildContext context, Weapon weapon, int index) {
     return Expanded(
       flex: 3,
       child: Container(
@@ -189,6 +189,11 @@ class Tag extends StatelessWidget {
                             ? AssetImage(weapon.imagePath)
                             : AssetImage('assets/tag/tag__weapon.png'),
                         fit: BoxFit.fill)),
+                child: SizedBox.expand(
+                  child: InkWell(
+                    onTap: () => context.read<Players>().roulette(index),
+                  ),
+                ),
               ),
             ],
           )),
